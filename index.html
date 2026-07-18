@@ -96,27 +96,29 @@
 <script>
 /* ─── 설정: 내 그림체 샘플 (저장소의 style 폴더에 넣기) ─── */
 const STYLE_IMAGES = ["style/1.png","style/2.png","style/3.png"]; // 없으면 자동으로 건너뜀
-const WORKER_URL  = "https://diary-comic.enjoy-ssun.workers.dev"; // ← 내 Worker 주소로 변경!
+// 구글 심부름꾼 (Apps Script) — 구글 서버에서 실행되어 지역 제한이 없어요
+const SCRIPT_URL  = "https://script.google.com/macros/s/AKfycbx2DIOX_BSKieWPtRJmPThi9PKaV0MeTjjhfW1w1QN438qxT-vtqWAUMsR9xhRzSSnW/exec";
 // 위에서부터 차례로 시도 → 안 되면 자동으로 다음 모델로 넘어가요
 const TEXT_MODELS  = ["gemini-3.5-flash","gemini-3-flash-preview","gemini-3.1-flash-lite","gemini-flash-latest","gemini-2.5-flash-lite"];
 const IMAGE_MODELS = ["gemini-3.1-flash-image","gemini-3.1-flash-lite-image","gemini-2.5-flash-image"];
-const API = m => `${WORKER_URL}?model=${m}`;
 
 /* 후보 모델을 순서대로 시도하는 공통 함수 */
 async function tryModels(models, body){
   const report = [];
   for(const m of models){
-    const r = await fetch(API(m),{
-      method:"POST",headers:{"Content-Type":"application/json"},
-      body:JSON.stringify(body)
+    // Content-Type을 text/plain으로 보내면 브라우저 사전검사(CORS preflight) 없이 통과해요
+    const r = await fetch(SCRIPT_URL, {
+      method:"POST",
+      headers:{"Content-Type":"text/plain;charset=utf-8"},
+      body: JSON.stringify({model:m, body})
     });
-    if(r.ok) return r.json();
-    const t = await r.text().catch(()=> "");
-    // 에러 본문에서 핵심 문구만 추출
-    let brief = t.slice(0,80);
-    try{ brief = JSON.parse(t).error.message.slice(0,80); }catch(e){}
-    report.push(`${m} → ${r.status}: ${brief}`);
-    if(![400,404,429,503].includes(r.status)) break;
+    if(!r.ok){ report.push(`${m} → 심부름꾼 연결 실패 (${r.status})`); continue; }
+    const wrap = await r.json(); // {status, body}
+    if(wrap.status === 200) return JSON.parse(wrap.body);
+    let brief = String(wrap.body).slice(0,80);
+    try{ brief = JSON.parse(wrap.body).error.message.slice(0,80); }catch(e){}
+    report.push(`${m} → ${wrap.status}: ${brief}`);
+    if(![400,404,429,503].includes(wrap.status)) break;
   }
   throw new Error("\n" + report.join("\n"));
 }
