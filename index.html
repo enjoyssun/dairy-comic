@@ -44,14 +44,15 @@
   /* 그림일기 상단: 날짜 + 날씨 */
   .diary-head{ display:flex; gap:12px; margin-bottom:14px; flex-wrap:wrap; }
   .date-box,.weather-box{ padding:10px 16px; }
-  .date-box{ flex:1; min-width:180px; display:flex; align-items:center; gap:8px; }
+  .date-box{ flex:1; min-width:240px; display:flex; align-items:center; gap:8px; white-space:nowrap; }
+  .label-mini{ white-space:nowrap; }
   .weather-box{ flex:2; min-width:260px; display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
   .label-mini{ font-weight:700; }
   .w-btn{
-    font-family:inherit; font-size:1.5rem; line-height:1;
-    background:transparent; border:3px solid transparent; border-radius:50%;
-    padding:6px 8px; cursor:pointer; transition:transform .08s;
+    line-height:0; background:transparent; border:3px solid transparent;
+    padding:5px; cursor:pointer; transition:transform .08s;
   }
+  .w-btn svg{ display:block; }
   .w-btn:hover{ transform:scale(1.15) rotate(-6deg); }
   .w-btn.on{
     border-color:var(--ink);
@@ -129,15 +130,48 @@
 
   <div class="diary-head">
     <div class="date-box doodle">
-      <span class="label-mini">📅 날짜:</span><span id="today"></span>
+      <span class="label-mini">날짜:</span><span id="today"></span>
     </div>
     <div class="weather-box doodle">
       <span class="label-mini">날씨:</span>
-      <button class="w-btn on" data-w="맑음">☀️</button>
-      <button class="w-btn" data-w="구름">☁️</button>
-      <button class="w-btn" data-w="비">🌧️</button>
-      <button class="w-btn" data-w="눈">❄️</button>
-      <button class="w-btn" data-w="바람">🍃</button>
+      <button class="w-btn on" data-w="맑음" title="맑음">
+        <svg viewBox="0 0 40 40" width="34" height="34" fill="none" stroke="#4A4440" stroke-width="2.4" stroke-linecap="round">
+          <circle cx="20" cy="21" r="7.3" fill="#FFD95C"/>
+          <path d="M20 7.5 L20.3 11"/><path d="M20 31.5 L19.7 35"/>
+          <path d="M6.5 21 L10 20.7"/><path d="M30 21.3 L33.5 21"/>
+          <path d="M10.5 11.5 L13 14"/><path d="M27.2 28.2 L29.6 30.6"/>
+          <path d="M29.4 11.4 L27 13.9"/><path d="M12.8 28.4 L10.4 30.7"/>
+        </svg>
+      </button>
+      <button class="w-btn" data-w="구름" title="구름">
+        <svg viewBox="0 0 40 40" width="34" height="34" fill="#fff" stroke="#4A4440" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M11 26 C6.5 26 6 20.5 10 19.4 C9.7 14.7 15 12.3 18.2 15 C20 10.8 27 11.5 27.6 16.3 C32.5 15.9 34.3 22.6 30 25.2 C29 26.2 13 26.2 11 26 Z"/>
+        </svg>
+      </button>
+      <button class="w-btn" data-w="비" title="비">
+        <svg viewBox="0 0 40 40" width="34" height="34" fill="none" stroke="#4A4440" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <path fill="#fff" d="M11 21 C6.8 21 6.4 16 10 15.1 C9.8 11 14.6 8.9 17.5 11.3 C19.2 7.6 25.5 8.3 26 12.6 C30.4 12.2 32 18.2 28.2 20.5 C27.2 21.3 12.8 21.3 11 21 Z"/>
+          <path d="M13.5 26 L12.3 30" stroke="#9CC8E8" stroke-width="2.8"/>
+          <path d="M20 26.5 L18.8 31" stroke="#9CC8E8" stroke-width="2.8"/>
+          <path d="M26.5 26 L25.3 30" stroke="#9CC8E8" stroke-width="2.8"/>
+        </svg>
+      </button>
+      <button class="w-btn" data-w="눈" title="눈">
+        <svg viewBox="0 0 40 40" width="34" height="34" fill="none" stroke="#9CC8E8" stroke-width="2.6" stroke-linecap="round">
+          <path d="M20 9 L20 31"/><path d="M10.5 14.5 L29.5 25.5"/><path d="M29.5 14.5 L10.5 25.5"/>
+          <path d="M20 9 L17.6 11.6 M20 9 L22.4 11.6" stroke-width="2"/>
+          <path d="M20 31 L17.6 28.4 M20 31 L22.4 28.4" stroke-width="2"/>
+          <circle cx="20" cy="20" r="2" fill="#9CC8E8" stroke="none"/>
+        </svg>
+      </button>
+      <button class="w-btn" data-w="바람" title="바람">
+        <svg viewBox="0 0 40 40" width="34" height="34" fill="none" stroke="#4A4440" stroke-width="2.4" stroke-linecap="round">
+          <path d="M7 15.5 C15 14 20 15.5 24.5 14.5 C28.5 13.6 28.8 9 25.4 9"/>
+          <path d="M7 21.5 C17 20.5 24 22 30.5 21 C34 20.4 34.5 16 31.2 15.6"/>
+          <path d="M7 27.5 C13 26.5 17.5 28 22 27.3"/>
+          <path fill="#8FC97F" stroke="#4A4440" d="M27 27.5 C28 23.5 32.5 22.5 34.5 24 C34.5 28 30.5 30 27 27.5 Z"/>
+        </svg>
+      </button>
     </div>
   </div>
 
@@ -146,7 +180,7 @@
     <textarea id="diary" placeholder="오늘은 이런 일이 있었다..."></textarea>
   </div>
 
-  <button id="go">만화 만들기 ✨</button>
+  <button id="go">만화 만들기</button>
   <p id="status"></p>
 
   <div id="result">
@@ -154,8 +188,6 @@
     <p id="title"></p>
     <button id="dl">그림 저장하기 💾</button>
   </div>
-
-  <footer>스타일 참고 그림: <code>style/1.png ~ 3.png</code> 를 저장소에 넣으면 내 그림체로 그려요.</footer>
 </div>
 <div class="grass"></div>
 
