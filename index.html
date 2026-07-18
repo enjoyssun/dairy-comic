@@ -7,78 +7,143 @@
 <link href="https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&family=IBM+Plex+Sans+KR:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root{
-    --paper:#F7F9F4;      /* 노트 종이 */
-    --grid:#DCE6DA;       /* 모눈 선 */
-    --ink:#2E3440;        /* 잉크 */
-    --marker:#FFE45C;     /* 형광펜 */
-    --stamp:#E56B4E;      /* 도장 빨강 */
-    --pencil:#8A93A2;     /* 연필 회색 */
+    --paper:#FFFDF4;      /* 크림색 도화지 */
+    --ink:#4A4440;        /* 크레용 진갈색 */
+    --crayon-red:#F0776B; /* 지붕 빨강 */
+    --crayon-yellow:#FFD95C;
+    --crayon-green:#8FC97F;
+    --crayon-blue:#9CC8E8;
+    --blush:#FFC9B8;
   }
   *{box-sizing:border-box;margin:0;padding:0}
   body{
-    font-family:'IBM Plex Sans KR',sans-serif;color:var(--ink);
+    font-family:'Gaegu',cursive;color:var(--ink);
     background:var(--paper);
-    background-image:linear-gradient(var(--grid) 1px,transparent 1px),
-                     linear-gradient(90deg,var(--grid) 1px,transparent 1px);
-    background-size:24px 24px;
-    min-height:100vh;padding:32px 16px 80px;
+    min-height:100vh;padding:36px 16px 90px;font-size:1.15rem;
   }
-  .wrap{max-width:680px;margin:0 auto}
+  .wrap{max-width:640px;margin:0 auto}
+
+  /* 삐뚤빼뚤 손그림 테두리 */
+  .doodle{
+    background:#fff;border:3px solid var(--ink);
+    border-radius:255px 18px 225px 18px/18px 225px 18px 255px;
+    box-shadow:4px 5px 0 rgba(74,68,64,.12);
+  }
+
+  header{ text-align:center; margin-bottom:26px; position:relative; }
   h1{
-    font-family:'Gaegu',cursive;font-weight:700;font-size:2.6rem;line-height:1.1;
-    display:inline;background:linear-gradient(transparent 55%,var(--marker) 55%);
+    font-weight:700;font-size:2.7rem;letter-spacing:.06em;display:inline-block;
+    background:linear-gradient(transparent 58%,var(--crayon-yellow) 58%);
+    padding:0 10px;transform:rotate(-1deg);
   }
-  .sub{margin:10px 0 28px;color:var(--pencil);font-size:.95rem}
-  .card{
-    background:#fff;border:2px solid var(--ink);border-radius:4px;
-    box-shadow:5px 5px 0 rgba(46,52,64,.15);padding:20px;margin-bottom:20px;
+  .deco{ font-size:1.5rem; position:absolute; }
+  .deco.sun{ right:8%; top:-6px; transform:rotate(12deg); }
+  .deco.cloud{ left:6%; top:4px; transform:rotate(-6deg); }
+  .sub{ margin-top:8px; color:#8d857e; font-size:1.05rem; }
+
+  /* 그림일기 상단: 날짜 + 날씨 */
+  .diary-head{ display:flex; gap:12px; margin-bottom:14px; flex-wrap:wrap; }
+  .date-box,.weather-box{ padding:10px 16px; }
+  .date-box{ flex:1; min-width:180px; display:flex; align-items:center; gap:8px; }
+  .weather-box{ flex:2; min-width:260px; display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
+  .label-mini{ font-weight:700; }
+  .w-btn{
+    font-family:inherit; font-size:1.5rem; line-height:1;
+    background:transparent; border:3px solid transparent; border-radius:50%;
+    padding:6px 8px; cursor:pointer; transition:transform .08s;
   }
-  label{font-family:'Gaegu',cursive;font-size:1.25rem;display:block;margin-bottom:6px}
-  textarea,input[type=password]{
-    width:100%;border:1.5px solid var(--ink);border-radius:3px;background:var(--paper);
-    font-family:inherit;font-size:1rem;padding:10px;color:var(--ink);
+  .w-btn:hover{ transform:scale(1.15) rotate(-6deg); }
+  .w-btn.on{
+    border-color:var(--ink);
+    background:var(--crayon-yellow);
+    border-radius:255px 18px 225px 18px/18px 225px 18px 255px;
   }
-  textarea{min-height:150px;resize:vertical;line-height:1.7}
-  textarea:focus,input:focus{outline:2px solid var(--marker)}
-  .hint{font-size:.8rem;color:var(--pencil);margin-top:6px}
-  .hint a{color:var(--stamp)}
-  button{
-    font-family:'Gaegu',cursive;font-size:1.4rem;font-weight:700;cursor:pointer;
-    background:var(--marker);color:var(--ink);border:2px solid var(--ink);
-    border-radius:4px;padding:10px 28px;box-shadow:3px 3px 0 var(--ink);
-    transition:transform .05s;
+
+  .card{ padding:20px; margin-bottom:18px; }
+  label{ font-size:1.3rem; font-weight:700; display:block; margin-bottom:8px; }
+  textarea{
+    width:100%; border:3px dashed var(--ink); border-radius:14px;
+    background:var(--paper);
+    font-family:'Gaegu',cursive; font-size:1.2rem; padding:12px; color:var(--ink);
+    min-height:150px; resize:vertical; line-height:1.9;
   }
-  button:hover{transform:translate(1px,1px);box-shadow:2px 2px 0 var(--ink)}
-  button:disabled{opacity:.5;cursor:wait;transform:none}
-  #status{white-space:pre-wrap;font-family:'Gaegu',cursive;font-size:1.15rem;margin:14px 0;min-height:1.4em}
-  #status.err{color:var(--stamp)}
-  /* 완성작: 책상 위에 테이프로 붙인 느낌 */
-  #result{display:none;text-align:center;margin-top:28px}
-  #result.show{display:block}
+  textarea:focus{ outline:3px solid var(--crayon-yellow); }
+
+  button#go{
+    font-family:inherit; font-size:1.5rem; font-weight:700; cursor:pointer;
+    background:var(--crayon-red); color:#fff;
+    border:3px solid var(--ink);
+    border-radius:255px 18px 225px 18px/18px 225px 18px 255px;
+    padding:12px 34px; box-shadow:4px 4px 0 var(--ink);
+    transition:transform .06s;
+  }
+  button#go:hover{ transform:translate(2px,2px); box-shadow:2px 2px 0 var(--ink); }
+  button#go:disabled{ opacity:.55; cursor:wait; transform:none; }
+
+  #status{ white-space:pre-wrap; font-size:1.15rem; margin:16px 0; min-height:1.4em; }
+  #status.err{ color:var(--crayon-red); }
+
+  /* 완성작: 도화지에 테이프로 붙인 느낌 */
+  #result{ display:none; text-align:center; margin-top:30px; }
+  #result.show{ display:block; }
   .tape{
-    display:inline-block;position:relative;background:#fff;padding:14px;
-    border:1.5px solid var(--ink);transform:rotate(-1.2deg);
-    box-shadow:6px 8px 14px rgba(46,52,64,.2);
+    display:inline-block; position:relative; background:#fff; padding:14px;
+    border:3px solid var(--ink);
+    border-radius:18px 255px 18px 225px/225px 18px 255px 18px;
+    transform:rotate(-1.2deg);
+    box-shadow:6px 8px 16px rgba(74,68,64,.18);
   }
   .tape::before{
-    content:"";position:absolute;top:-14px;left:50%;transform:translateX(-50%) rotate(2deg);
-    width:110px;height:28px;background:rgba(255,228,92,.75);
-    border-left:1px dashed rgba(46,52,64,.3);border-right:1px dashed rgba(46,52,64,.3);
+    content:""; position:absolute; top:-15px; left:50%; transform:translateX(-50%) rotate(2deg);
+    width:110px; height:30px; background:rgba(255,217,92,.8);
+    border-left:2px dashed rgba(74,68,64,.35); border-right:2px dashed rgba(74,68,64,.35);
   }
-  #comicCanvas{max-width:100%;height:auto;display:block}
-  #title{font-family:'Gaegu',cursive;font-size:1.6rem;margin:16px 0 4px}
-  #dl{margin-top:14px}
-  footer{margin-top:48px;text-align:center;color:var(--pencil);font-size:.8rem}
+  #comicCanvas{ max-width:100%; height:auto; display:block; border-radius:8px; }
+  #title{ font-size:1.7rem; margin:16px 0 4px; }
+  button#dl{
+    font-family:inherit; font-size:1.2rem; font-weight:700; cursor:pointer;
+    background:var(--crayon-green); color:#fff; border:3px solid var(--ink);
+    border-radius:255px 18px 225px 18px/18px 225px 18px 255px;
+    padding:8px 22px; box-shadow:3px 3px 0 var(--ink); margin-top:14px;
+  }
+
+  /* 잔디 발치 장식 */
+  .grass{
+    position:fixed; left:0; right:0; bottom:0; height:34px; pointer-events:none;
+    background:var(--crayon-green);
+    border-top:3px solid var(--ink);
+    border-radius:60% 40% 0 0/100% 80% 0 0;
+    opacity:.9;
+  }
+  footer{ margin-top:44px; text-align:center; color:#a39a92; font-size:.95rem; }
 </style>
 </head>
 <body>
 <div class="wrap">
-  <h1>일기 4컷 만화</h1>
-  <p class="sub">오늘 있었던 일을 쓰면, 4컷 만화로 그려드려요.</p>
+  <header>
+    <span class="deco cloud">☁️</span>
+    <h1>나의 그림일기</h1>
+    <span class="deco sun">🌞</span>
+    <p class="sub">오늘 있었던 일을 쓰면, 4컷 만화로 그려드려요.</p>
+  </header>
 
-  <div class="card">
+  <div class="diary-head">
+    <div class="date-box doodle">
+      <span class="label-mini">📅 날짜:</span><span id="today"></span>
+    </div>
+    <div class="weather-box doodle">
+      <span class="label-mini">날씨:</span>
+      <button class="w-btn on" data-w="맑음">☀️</button>
+      <button class="w-btn" data-w="구름">☁️</button>
+      <button class="w-btn" data-w="비">🌧️</button>
+      <button class="w-btn" data-w="눈">❄️</button>
+      <button class="w-btn" data-w="바람">🍃</button>
+    </div>
+  </div>
+
+  <div class="card doodle">
     <label for="diary">✏️ 오늘의 일기</label>
-    <textarea id="diary" placeholder="오늘은 비가 왔다. 우산을 안 가져가서..."></textarea>
+    <textarea id="diary" placeholder="오늘은 이런 일이 있었다..."></textarea>
   </div>
 
   <button id="go">만화 만들기 ✨</button>
@@ -92,6 +157,7 @@
 
   <footer>스타일 참고 그림: <code>style/1.png ~ 3.png</code> 를 저장소에 넣으면 내 그림체로 그려요.</footer>
 </div>
+<div class="grass"></div>
 
 <script>
 /* ─── 설정: 내 그림체 샘플 (저장소의 style 폴더에 넣기) ─── */
@@ -102,7 +168,7 @@ const SCRIPT_URL  = "https://script.google.com/macros/s/AKfycbx2DIOX_BSKieWPtRJm
 const TEXT_MODELS  = ["gemini-3.5-flash","gemini-3-flash-preview","gemini-3.1-flash-lite","gemini-flash-latest","gemini-2.5-flash-lite"];
 const IMAGE_MODELS = ["gemini-3.1-flash-image","gemini-3.1-flash-lite-image","gemini-2.5-flash-image"];
 // 예비 화가(Pollinations)에게 알려줄 내 그림체 설명 (자유롭게 수정하세요!)
-const STYLE_TEXT = "cute simple hand-drawn Korean diary comic style, thin clean ink lines, soft pastel colors, round friendly characters";
+const STYLE_TEXT = "minimalist cute Korean doodle diary comic, wobbly hand-drawn crayon outlines, a girl with yellow bob hair and curly scribble bangs, tiny dot eyes, small blush marks on cheeks, mostly white background with lots of empty space, color only on hair (yellow) and tiny accents, childlike simple shapes, no shading, no detailed background";
 
 /* 후보 모델을 순서대로 시도하는 공통 함수 */
 async function tryModels(models, body){
@@ -126,6 +192,23 @@ async function tryModels(models, body){
 }
 
 const $ = id => document.getElementById(id);
+
+/* 오늘 날짜 표시 */
+(()=>{
+  const d = new Date();
+  const days = ["일","월","화","수","목","금","토"];
+  $("today").textContent = `${d.getFullYear()}년 ${d.getMonth()+1}월 ${d.getDate()}일 (${days[d.getDay()]})`;
+})();
+
+/* 날씨 선택 */
+let weather = "맑음";
+document.querySelectorAll(".w-btn").forEach(b=>{
+  b.addEventListener("click", ()=>{
+    document.querySelectorAll(".w-btn").forEach(x=>x.classList.remove("on"));
+    b.classList.add("on");
+    weather = b.dataset.w;
+  });
+});
 const status = (msg, err=false) => { $("status").textContent = msg; $("status").className = err?"err":""; };
 
 /* 스타일 샘플을 base64로 로드 (없으면 빈 배열) */
@@ -226,7 +309,7 @@ $("go").addEventListener("click", async ()=>{
     status("내 그림체 샘플을 챙기는 중…");
     const refs = await loadStyleRefs();
     status("콘티를 짜는 중… 📝");
-    const sb = await makeStoryboard(diary);
+    const sb = await makeStoryboard(diary + `\n(오늘의 날씨: ${weather})`);
     const comicSeed = Math.floor(Math.random()*1000000); // 매번 다른 그림이 나오게
     const urls=[];
     for(let i=0;i<4;i++){
