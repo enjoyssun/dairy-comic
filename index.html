@@ -227,10 +227,11 @@ $("go").addEventListener("click", async ()=>{
     const refs = await loadStyleRefs();
     status("콘티를 짜는 중… 📝");
     const sb = await makeStoryboard(diary);
+    const comicSeed = Math.floor(Math.random()*1000000); // 매번 다른 그림이 나오게
     const urls=[];
     for(let i=0;i<4;i++){
       status(`${i+1}번째 컷을 그리는 중… 🎨 (${i+1}/4)`);
-      urls.push(await makePanel(sb.panels[i].scene_en, refs, Number(seed)+i));
+      urls.push(await makePanel(sb.panels[i].scene_en, refs, comicSeed+i));
     }
     status("네 컷을 이어 붙이는 중… ✂️");
     await compose(urls, sb);
